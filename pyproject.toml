@@ -1,0 +1,38 @@
+[project]
+name = "python-euler"
+version = "0.1.0"
+description = "Python code to solve Project Euler problems"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "mathlib",
+    "project_euler",
+    "pytest",
+]
+
+[tool.uv.workspace]
+members = [
+    "mathlib",
+    "project_euler",
+    "quadratic_sieve",
+]
+
+[tool.uv.sources]
+mathlib = { workspace = true }
+project_euler = { workspace = true }
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "mathlib/src",
+    "project_euler",
+]
+testpaths = [
+    "mathlib/src",
+    "project_euler",
+]
+
+[tool.pyright]
+include = [
+    "mathlib/src",
+    "project_euler",
+]
