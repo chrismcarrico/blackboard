@@ -1,6 +1,6 @@
 import math
 
-from solution_set.solution_set import SolutionSet
+from project_euler.solution_set.solution_set import SolutionSet
 
 solution_set = SolutionSet(20, "Find the sum of the digits in the number 100!")
 

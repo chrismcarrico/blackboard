@@ -1,6 +1,6 @@
 import math
 
-from mathlib.eratoshenes import eratosthenes_generator
+from mathlib.eratoshenes import primes_less_than_n_generator
 from mathlib.factorization.vector import vector_factorization
 
 # https://risencrypto.github.io/QuadraticSieve/#kraitchiks-factorization
@@ -20,7 +20,7 @@ def calculate_b(n):
 
 def build_factor_base(n: int):
     b = calculate_b(n)
-    return [i for i in eratosthenes_generator(b) if pow(n, (i-1)//2, i) == 1]
+    return [i for i in primes_less_than_n_generator(b) if pow(n, (i-1)//2, i) == 1]
 
 
 def build_relations(

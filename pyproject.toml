@@ -8,13 +8,13 @@ dependencies = [
     "mathlib",
     "project_euler",
     "pytest",
+    "ipython"
 ]
 
 [tool.uv.workspace]
 members = [
     "mathlib",
     "project_euler",
-    "quadratic_sieve",
 ]
 
 [tool.uv.sources]

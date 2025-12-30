@@ -1,4 +1,4 @@
-from solution_set.solution_set import SolutionSet
+from project_euler.solution_set.solution_set import SolutionSet
 
 from mathlib.perfect_number import is_abundent
 

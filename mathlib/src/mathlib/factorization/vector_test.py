@@ -8,9 +8,9 @@ def test_factor_exponents():
 
 def test_factor_exponents_no_base():
     
-    assert vector_factorization(2**3 * 3**2 * 7) == {3, 2, 0, 1, 0, 0, 0, 0}
+    assert vector_factorization(2**3 * 3**2 * 7) == [3, 2, 0, 1, 0, 0, 0, 0]
 
 
 def test_factor_exponents_incomplete_base():
 
-    assert vector_factorization(2**3 * 3**2 * 7 * 11, [2, 3, 7]) == {}
+    assert vector_factorization(2**3 * 3**2 * 7 * 11, [2, 3, 7]) == None

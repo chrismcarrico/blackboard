@@ -1,11 +1,8 @@
-import math
+from mathlib.eratoshenes import primes_less_than_n
 
-from mathlib.eratoshenes import eratosthenes_generator
-
-def vector_factorization(n: int, primes: list[int] | None = None) ->list[int] | None:
+def vector_factorization(n: int, primes: list[int] | None = None) -> list[int] | None:        
     
-    if primes is None:
-        primes = [i for i in eratosthenes_generator(math.isqrt(n))]
+    primes = primes_less_than_n(n+1)
 
     factors = [0]*len(primes)
 

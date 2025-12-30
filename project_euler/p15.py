@@ -1,7 +1,7 @@
 """All paths through a lattice"""
 
 import math
-from solution_set.solution_set import SolutionSet
+from project_euler.solution_set.solution_set import SolutionSet
 
 solution_set = SolutionSet(15, "All paths through a lattice")
 

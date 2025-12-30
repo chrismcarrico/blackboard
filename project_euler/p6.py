@@ -1,5 +1,5 @@
 """Find (1 + 2 + ... + 100)**2 - (1**2 + 2**2 + ... + 100**2)"""
-from solution_set.solution_set import SolutionSet
+from project_euler.solution_set.solution_set import SolutionSet
 
 solution_set = SolutionSet(6, "Find (1 + 2 + ... + 100)**2 - (1**2 + 2**2 + ... + 100**2)")
 

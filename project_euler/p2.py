@@ -1,5 +1,5 @@
 from mathlib.fibonacci_sequence import fibonacci_sequence_generator
-from solution_set.solution_set import SolutionSet
+from project_euler.solution_set.solution_set import SolutionSet
 
 solution_set = SolutionSet(2, "Find the sum of all fibonacci numbers less than 4_000_000")
 

@@ -1,6 +1,6 @@
 import math
 
-from mathlib.eratoshenes import eratosthenes_generator
+from mathlib.eratoshenes import primes_less_than_n_generator
 
 def naive_factorization(n: int) -> list[int]:
     
@@ -9,7 +9,7 @@ def naive_factorization(n: int) -> list[int]:
     if n < 2:
         return []
     
-    sieve = eratosthenes_generator(n)
+    sieve = primes_less_than_n_generator(n)
     
     p = 1
     while p < math.floor(math.sqrt(n)):

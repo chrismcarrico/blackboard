@@ -1,7 +1,7 @@
 """Which Collatz chain under 1_000_000 is the longest"""
 
 from mathlib.collatz import collatz_chain_length
-from solution_set.solution_set import SolutionSet
+from project_euler.solution_set.solution_set import SolutionSet
 
 solution_set = SolutionSet(14, "Which Collatz chain under 1_000_000 is the longest")
 

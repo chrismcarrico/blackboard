@@ -1,8 +1,8 @@
 """Find the greatest product of four adjacent numbers in the same direction"""
 import math
 
-from data import load
-from solution_set.solution_set import SolutionSet
+from project_euler.data import load
+from project_euler.solution_set.solution_set import SolutionSet
 
 solution_set = SolutionSet(11, "Find the greatest product of four adjacent numbers in the same direction")
 

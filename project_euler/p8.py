@@ -2,8 +2,8 @@
 
 import math
 
-from data import load
-from solution_set.solution_set import SolutionSet
+from project_euler.data import load
+from project_euler.solution_set.solution_set import SolutionSet
 
 solution_set = SolutionSet(8, "Given an array of values, find the 13 consecutive numbers with the largest product")
 

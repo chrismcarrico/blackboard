@@ -1,6 +1,6 @@
 import math
 
-from mathlib.square import is_square
+from mathlib.quadratic_residue import is_square
 
 def fermat_factorization(n: int) -> list[int]:
 

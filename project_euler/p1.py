@@ -1,4 +1,4 @@
-from solution_set.solution_set import SolutionSet
+from project_euler.solution_set.solution_set import SolutionSet
 
 solution_set = SolutionSet(1, "Find all numbers less than 1000 that are divisible by 3 or 5")
 

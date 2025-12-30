@@ -1,7 +1,7 @@
 """Find a Pythagorean triple such that a + b + c = 1000"""
 
 from mathlib.pythagorean_triples import is_pythagorean_triple
-from solution_set.solution_set import SolutionSet
+from project_euler.solution_set.solution_set import SolutionSet
 
 solution_set = SolutionSet(9, "Find a Pythagorean triple such that a + b + c = 1000")
 

@@ -2,7 +2,7 @@
 
 from mathlib.sigma import sigma
 from mathlib.triangular_numbers import nth_triangular_number_formula
-from solution_set.solution_set import SolutionSet
+from project_euler.solution_set.solution_set import SolutionSet
 
 solution_set = SolutionSet(12, "Find the first triangle number with over 500 divisors")
 

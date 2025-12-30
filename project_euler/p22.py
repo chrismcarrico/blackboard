@@ -1,5 +1,5 @@
-from solution_set.solution_set import SolutionSet
-from data import load
+from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.data import load
 
 solution_set = SolutionSet(22, "What is the total of all the name scores in the file.")
 

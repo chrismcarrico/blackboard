@@ -1,4 +1,4 @@
-from solution_set.solution_set import SolutionSet
+from project_euler.solution_set.solution_set import SolutionSet
 
 solution_set = SolutionSet(16, "Find the sum of the digits of the number 2**1000")
 
