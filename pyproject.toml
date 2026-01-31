@@ -1,7 +1,7 @@
 [project]
-name = "python-euler"
+name = "blackboard"
 version = "0.1.0"
-description = "Python code to solve Project Euler problems"
+description = "Python implementations of various algorithms"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

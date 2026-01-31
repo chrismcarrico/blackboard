@@ -12,5 +12,4 @@ def test_factor_exponents_no_base():
 
 
 def test_factor_exponents_incomplete_base():
-
-    assert vector_factorization(2**3 * 3**2 * 7 * 11, [2, 3, 7]) == None
+    assert vector_factorization(2**3 * 3**2 * 7 * 11, [2, 3, 7]) is None

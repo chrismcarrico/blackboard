@@ -1,8 +1,11 @@
+import math
+
 from mathlib.eratoshenes import primes_less_than_n
 
 def vector_factorization(n: int, primes: list[int] | None = None) -> list[int] | None:        
     
-    primes = primes_less_than_n(n+1)
+    if primes is None:
+        primes = primes_less_than_n(math.isqrt(n))
 
     factors = [0]*len(primes)
 

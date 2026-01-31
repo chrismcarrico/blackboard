@@ -59,4 +59,6 @@ def test_least_i_st_t2_i_is_1(t,p,m,i):
     ]
 )
 def test_tonelli_shanks(n, p, result):
-    assert tonelli_shanks(n, p) == result
+    r = tonelli_shanks(n, p)
+    assert r is not None
+    assert r[0] == result

@@ -1,38 +1,42 @@
 import pytest
 
-from mathlib.factorization.qs import calculate_b, build_relations, build_factor_base
+from mathlib.factorization.qs import calculate_b, build_factor_base, quadratic_sieve_v1, calculate_ceil_sqrt_n
 
 @pytest.fixture
 def psuedoprime():
     return 587*149
 
 @pytest.fixture
-def factor_base():
+def expected_factor_base():
     return [2, 3, 13, 17, 19, 29, 41]
 
 @pytest.fixture
-def relations():
-    return {
-        3: [1, 1, 0, 1, 1, 0, 0], 
-        11: [1, 2, 1, 0, 0, 1, 0], 
-        20: [0, 6, 0, 1, 0, 0, 0], 
-        51: [1, 1, 0, 2, 1, 0, 0], 
-        89: [1, 1, 1, 0, 1, 0, 1], 
-        98: [0, 1, 0, 0, 1, 1, 1], 
-        117: [1, 7, 0, 0, 1, 0, 0], 
-        180: [0, 2, 1, 0, 0, 1, 1], 
-        765: [1, 4, 1, 1, 0, 1, 0], 
-        918: [0, 2, 1, 2, 0, 0, 1]
-    }
+def expected_roots():
+    return [(1, 1), (1, 2), (8, 5), (7, 10), (5, 14), (12, 17), (16, 25)]
 
-def test_calculate_b(psuedoprime):
-    assert calculate_b(psuedoprime) == 42
+@pytest.fixture
+def expected_adjusted_roots():
+    return [(1, 1), (2, 0), (11, 8), (0, 3), (13, 3), (6, 11), (7, 16)]
 
-def test_factor_base(psuedoprime, factor_base):
-    fb = build_factor_base(psuedoprime)
-    assert fb == factor_base
+@pytest.fixture
+def expected_b():
+    return 42
 
-def test_build_relations(psuedoprime, factor_base, relations):
+@pytest.fixture
+def expected_x_list():
+    return [3, 11, 20, 51, 89, 98, 117, 180, 765, 918, 1207, 1533]
 
-    r = build_relations(psuedoprime, factor_base, 10, 0)
-    assert r == relations
+@pytest.fixture
+def expected_fx_list():
+    return [1938, 6786, 12393, 32946, 60762, 67773, 83106, 139113, 1038258, 1386333, 2171546, 3257778]
+
+def test_calculate_b(psuedoprime, expected_b):
+    assert calculate_b(psuedoprime) == expected_b
+
+def test_factor_base(psuedoprime, expected_factor_base, expected_b):
+    fb = build_factor_base(psuedoprime, expected_b)
+    assert fb == expected_factor_base
+
+def test_quadratic_sieve(psuedoprime):
+
+    assert quadratic_sieve_v1(psuedoprime)

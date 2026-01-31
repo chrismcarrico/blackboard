@@ -1,47 +1,87 @@
 import math
 
+from mathlib.quadratic_residue import legendre_symbol
 from mathlib.eratoshenes import primes_less_than_n_generator
 from mathlib.factorization.vector import vector_factorization
+from mathlib.linalg.gf2_gaussian_elimination import BinaryMatrix, gf2_gaussian_elimination
+from mathlib.gcd import gcd
 
 # https://risencrypto.github.io/QuadraticSieve/#kraitchiks-factorization
 
 
-def polynomial_factory(n):
-    def f(x):
-        return (x + math.ceil(math.sqrt(n)))**2 - n
+def calculate_ceil_sqrt_n(n: int) -> int:
+    return math.ceil(math.sqrt(n))
 
-    return f
-
-def calculate_b(n):
+def calculate_b(n: int) -> int:
 
     ln_n = math.log(n)
     l = math.exp(math.sqrt(ln_n* math.log(ln_n)))
     return math.ceil(l**(1/math.sqrt(2)))
 
-def build_factor_base(n: int):
-    b = calculate_b(n)
-    return [i for i in primes_less_than_n_generator(b) if pow(n, (i-1)//2, i) == 1]
+def polynomial_factory(n: int):
+    def f(x):
+        return (x + calculate_ceil_sqrt_n(n))**2 - n
+
+    return f
+
+def build_factor_base(n: int, b: int) -> list[int]:
+
+    return [p for p in primes_less_than_n_generator(b) if legendre_symbol(n, p) == 1]
+
+def solve_for_solutions(m: BinaryMatrix):
+
+    m, marked = gf2_gaussian_elimination(m)
+
+    dependent_columns = []
+    for r, is_marked in enumerate(marked):
+        if not is_marked:
+            for c, value in enumerate(m[r]):
+                if value == 1:
+                    dependent_columns.append(c)
 
 
-def build_relations(
-        n: int, 
-        factor_base: list[int], 
-        num_relations: int, 
-        last_seen_index: int
-    ) -> dict[int, dict]:
+def quadratic_sieve_v1(n: int, b: int | None = None, m: int = 5000, tolerance: int = 5) -> tuple[int, int] | None:
     
-    index = last_seen_index + 1
-    relations = {}
-    polynomial = polynomial_factory(n)
+    f = polynomial_factory(n)
 
-    while len(relations) < num_relations:
-        
-        next_value = polynomial(index)
-        if vector := vector_factorization(next_value, factor_base):
-            relations[index] = vector
+    if b is None:
+        b = calculate_b(n)
 
-        index += 1
+    factor_base = build_factor_base(n, b)
 
-    return relations
+    exponent_vectors = []
+    fx_list = []
+    x_list = []
+    x = 1
+    while len(exponent_vectors) < len(factor_base) + tolerance:
+        fx = f(x)
+        if exponent_vector := vector_factorization(fx, factor_base):
+            x_list.append(x)
+            fx_list.append(fx)
+            exponent_vectors.append([i%2 for i in exponent_vector])
 
-        
+        x += 1
+        if x > m:
+            break
+
+    assert len(exponent_vectors) >= len(factor_base)
+
+    solutions = gf2_gaussian_elimination(exponent_vectors)
+
+    a = 1
+    b_squared = 1
+
+    for solution in solutions:
+        for i, is_solution in enumerate(solution):
+
+            if is_solution:
+                a = (a * x_list[i]) % n
+                b_squared = (b_squared * fx_list[i]) % n
+
+        b = math.isqrt(b_squared)
+        factor = gcd(a-b, n)
+
+        if 1 < factor < n:
+            return factor, n // factor
+    
+    return None

@@ -29,15 +29,19 @@ def _least_i_st_t2_i_is_1(t:int, p:int, m:int) -> int:
 
     raise RuntimeError   
 
-def tonelli_shanks(n: int, p: int) -> int:
+def tonelli_shanks(n: int, p: int) -> tuple[int, int] | None:
 
-    assert n > 0 and p > 0
+    if p == 2:
+        return (1,1)
+
+    assert n > 0 and p > 2
     assert legendre_symbol(n, p) == 1, "not a square (mod p)"
     
     s, q = _seperate_powers_of_2(p-1)
 
     if s == 1:
-        return pow(n, (p + 1) // 4, p)
+        r = pow(n, (p + 1) // 4, p)
+        return (r, p-r)
     
     z = _find_first_z_st_non_qr_mod_p(p)
 
@@ -49,10 +53,10 @@ def tonelli_shanks(n: int, p: int) -> int:
     while True:
 
         if t % p == 0:
-            return 0
+            return None
 
         elif t % p == 1:
-            return r
+            return (r, p-r)
         
         else:
         
