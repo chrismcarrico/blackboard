@@ -8,7 +8,7 @@ dependencies = [
     "mathlib",
     "project_euler",
     "pytest",
-    "ipython"
+    "ipython",
 ]
 
 [tool.uv.workspace]

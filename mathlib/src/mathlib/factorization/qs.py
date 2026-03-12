@@ -1,5 +1,6 @@
 import math
 
+from functools import reduce
 from mathlib.quadratic_residue import legendre_symbol
 from mathlib.eratoshenes import primes_less_than_n_generator
 from mathlib.factorization.vector import vector_factorization
@@ -28,16 +29,19 @@ def build_factor_base(n: int, b: int) -> list[int]:
 
     return [p for p in primes_less_than_n_generator(b) if legendre_symbol(n, p) == 1]
 
-def solve_for_solutions(m: BinaryMatrix):
+def bitwise_xor(a, b):
 
+    return [i^j for i,j in zip(a,b)]
+
+def solve_for_solutions_v1(m: BinaryMatrix):
+
+    solutions = []
     m, marked = gf2_gaussian_elimination(m)
 
-    dependent_columns = []
-    for r, is_marked in enumerate(marked):
-        if not is_marked:
-            for c, value in enumerate(m[r]):
-                if value == 1:
-                    dependent_columns.append(c)
+    all_possible_solutions = [[(i >> j) & 1 for j in range(len(m) - 1, -1, -1)] for i in range(1, 2**len(m))]
+
+
+    return solutions
 
 
 def quadratic_sieve_v1(n: int, b: int | None = None, m: int = 5000, tolerance: int = 5) -> tuple[int, int] | None:
@@ -66,22 +70,24 @@ def quadratic_sieve_v1(n: int, b: int | None = None, m: int = 5000, tolerance: i
 
     assert len(exponent_vectors) >= len(factor_base)
 
-    solutions = gf2_gaussian_elimination(exponent_vectors)
+    solutions = solve_for_solutions_v1(exponent_vectors)
 
     a = 1
     b_squared = 1
 
     for solution in solutions:
-        for i, is_solution in enumerate(solution):
 
-            if is_solution:
-                a = (a * x_list[i]) % n
-                b_squared = (b_squared * fx_list[i]) % n
+        a = (a * x_list[solution]) % n
+        b_squared = (b_squared * fx_list[solution]) % n
 
         b = math.isqrt(b_squared)
+
+        if a-b >= n or a-b < 0:
+            continue
+
         factor = gcd(a-b, n)
 
         if 1 < factor < n:
             return factor, n // factor
     
-    return None
+    
