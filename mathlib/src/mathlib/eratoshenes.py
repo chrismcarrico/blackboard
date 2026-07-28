@@ -1,6 +1,8 @@
 import math
 import typing
 
+#TODO: MemoryError?
+
 def primes_less_than_n(n: int) -> list[int]:
     is_prime = [1]*n
 

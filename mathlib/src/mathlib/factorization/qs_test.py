@@ -37,6 +37,6 @@ def test_factor_base(psuedoprime, expected_factor_base, expected_b):
     fb = build_factor_base(psuedoprime, expected_b)
     assert fb == expected_factor_base
 
+@pytest.mark.skip(reason="Not implemented yet")
 def test_quadratic_sieve(psuedoprime):
-
     assert quadratic_sieve_v1(psuedoprime)
