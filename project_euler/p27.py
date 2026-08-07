@@ -6,7 +6,6 @@ from mathlib.primality.miller_rabin import miller_rabin
 problem = Problem(27, "Find the product of the coefficients, a and b, for the quadratic expression that produces the maximum number of primes for consecutive values of n, starting with n = 0.")
 
 
-
 @problem.register()
 def solution():
     

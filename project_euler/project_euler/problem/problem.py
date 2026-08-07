@@ -19,12 +19,18 @@ def _alarm_handler(signum, frame):
 
 class Problem:
 
-    def __init__(self, number: int, problem_description: str):
+    def __init__(self, number: int, problem_description: str | None = None):
         self.number = number
         self.description = problem_description
         self._solutions: dict[str, typing.Callable] = {}
         self.default: str | None = None
         self.logger = logging.getLogger(f"project_euler.p{number}")
+        
+    def debug(self, log:object):
+        self.logger.debug(str(log))    
+    
+    def info(self, log:object):
+        self.logger.info(str(log))
 
     @property
     def solutions(self):
