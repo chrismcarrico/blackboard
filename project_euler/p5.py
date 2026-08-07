@@ -4,11 +4,11 @@ import math
 
 from mathlib.eratoshenes import primes_less_than_n
 from mathlib.factorization.vector import vector_factorization
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
-solution_set = SolutionSet(5, "Find the smallest number divisible by 2...20")
+problem = Problem(5, "Find the smallest number divisible by 2...20")
 
-@solution_set.register("naive")
+@problem.register("naive")
 def solution_1():
         
     limit = math.prod(range(2, 21))
@@ -19,7 +19,7 @@ def solution_1():
             
     raise RuntimeError
 
-@solution_set.register(default=True)
+@problem.register(default=True)
 def solution_2():
     
     primes = primes_less_than_n(21)
@@ -35,4 +35,4 @@ def solution_2():
     return math.prod([i**k for i,k in zip(primes, n)])
     
 if __name__ == "__main__":
-    solution_set.main()
+    problem.main()

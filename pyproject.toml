@@ -7,7 +7,6 @@ requires-python = ">=3.13"
 dependencies = [
     "mathlib",
     "project_euler",
-    "pytest",
     "ipython",
 ]
 
@@ -35,4 +34,12 @@ testpaths = [
 include = [
     "mathlib/src",
     "project_euler",
+]
+
+[dependency-groups]
+dev = [
+    "black>=26.5.1",
+    "pytest>=9.0.1",
+    "ruff>=0.16.1",
+    "uv>=0.12.2",
 ]

@@ -3,11 +3,11 @@
 import math
 
 from project_euler.data import load
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
-solution_set = SolutionSet(8, "Given an array of values, find the 13 consecutive numbers with the largest product")
+problem = Problem(8, "Given an array of values, find the 13 consecutive numbers with the largest product")
 
-@solution_set.register()
+@problem.register()
 def solution():
     array = load("p8_input")
     s = "".join(array.split())
@@ -18,4 +18,4 @@ def solution():
     return max(products)
 
 if __name__ == "__main__":
-    solution_set.main()
+    problem.main()

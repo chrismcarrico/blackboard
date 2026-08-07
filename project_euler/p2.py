@@ -1,9 +1,9 @@
 from mathlib.fibonacci_sequence import fibonacci_sequence_generator
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
-solution_set = SolutionSet(2, "Find the sum of all fibonacci numbers less than 4_000_000")
+problem = Problem(2, "Find the sum of all fibonacci numbers less than 4_000_000")
 
-@solution_set.register()
+@problem.register()
 def solution():
     
     n = 4_000_000

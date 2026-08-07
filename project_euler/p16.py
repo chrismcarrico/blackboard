@@ -1,10 +1,10 @@
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
-solution_set = SolutionSet(16, "Find the sum of the digits of the number 2**1000")
+problem = Problem(16, "Find the sum of the digits of the number 2**1000")
 
-@solution_set.register()
+@problem.register()
 def solution():
     return sum([int(i) for i in str(pow(2,1000))])
 
 if __name__ == "__main__":
-    solution_set.main()
+    problem.main()

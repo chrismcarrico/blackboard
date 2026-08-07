@@ -1,11 +1,11 @@
 """Find the 10_001th prime"""
 
 from mathlib.eratoshenes import primes_less_than_n_generator
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
-solution_set = SolutionSet(7, "Find the 10_001th prime")
+problem = Problem(7, "Find the 10_001th prime")
 
-@solution_set.register()
+@problem.register()
 def solution():
     
     sieve = primes_less_than_n_generator(10_000_000)
@@ -17,5 +17,5 @@ def solution():
     return discovered_primes[-1]
 
 if __name__ == "__main__":
-    solution_set.main()
+    problem.main()
     

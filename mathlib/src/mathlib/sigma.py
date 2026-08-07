@@ -1,5 +1,5 @@
 def sigma(n:int, z:int=0) -> int:
-    
+    """Returns the sum of the z-th powers of the divisors of n."""
     
     s = 0
     i = 1

@@ -2,18 +2,29 @@ import time
 import functools
 import argparse
 import logging
+import signal
 import typing
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
-_logger = logging.getLogger(__name__)
 
-class SolutionSet:
+
+class SolutionTimeoutError(Exception):
+    pass
+
+
+def _alarm_handler(signum, frame):
+    del signum, frame
+    raise SolutionTimeoutError()
+
+
+class Problem:
 
     def __init__(self, number: int, problem_description: str):
         self.number = number
         self.description = problem_description
         self._solutions: dict[str, typing.Callable] = {}
         self.default: str | None = None
+        self.logger = logging.getLogger(f"project_euler.p{number}")
 
     @property
     def solutions(self):
@@ -32,48 +43,71 @@ class SolutionSet:
             return fn
         return wrapper
 
-    def run_solution(self, solution_name: str | None = None):
-        
+    def _resolve_solution_name(self, solution_name: str | None) -> str:
+
         if solution_name is None:
             solution_name = self.default
 
         if solution_name is None:
             solution_name = list(self._solutions.keys())[0]
 
-        return self._solutions[solution_name]()
-    
-    def run(self, solution_name: str | None = None, timed: bool = False, verbose: int = 0):
+        return solution_name
 
-        if verbose > 0:
-            _logger.setLevel(logging.DEBUG)
-        
-        _logger.info(f"Problem {self.number}:")
-        
+    def run_solution(self, solution_name: str | None = None, timeout: int | None = None):
+
+        solution_name = self._resolve_solution_name(solution_name)
+        fn = self._solutions[solution_name]
+
+        if timeout is None:
+            return fn()
+
+        previous_handler = signal.signal(signal.SIGALRM, _alarm_handler)
+        signal.alarm(timeout)
+        try:
+            return fn()
+        finally:
+            signal.alarm(0)
+            signal.signal(signal.SIGALRM, previous_handler)
+
+    def run(self, solution_name: str | None = None, timed: bool = False, verbose: int = 0, timeout: int | None = None):
+
+        self.logger.setLevel(logging.DEBUG if verbose > 0 else logging.INFO)
+
+        resolved_name = self._resolve_solution_name(solution_name)
+
+        self.logger.info(f"Problem {self.number}:")
+
         st = time.time()
-        result = self.run_solution(solution_name)
+        try:
+            result = self.run_solution(resolved_name, timeout=timeout)
+        except SolutionTimeoutError:
+            se = time.time()
+            self.logger.error(f"\tSolution '{resolved_name}' timed out after {se-st:.6f} seconds")
+            return
+
         se = time.time()
 
-        _logger.info(f"\tAnswer: {result}")
+        self.logger.info(f"\tAnswer: {result}")
         if timed:
-            _logger.info(f"\tTime: {se-st:.6f} seconds")
+            self.logger.info(f"\tTime: {se-st:.6f} seconds")
 
     def list_solutions(self) -> list[str]:
         return list(self._solutions.keys())
 
     def list(self, verbose: int = 0) -> None:
-        del verbose # unused for now 
-        _logger.info(f"Available solutions for problem {self.number}")
+        self.logger.setLevel(logging.DEBUG if verbose > 0 else logging.INFO)
+        self.logger.info(f"Available solutions for problem {self.number}")
         for solution_name in self.list_solutions():
-            _logger.info(f"\t{solution_name}")
+            self.logger.info(f"\t{solution_name}")
 
     def main(self) -> None:
         args = self.cli.parse_args()
-        
+
         match args.command:
 
             case "run":
-                self.run(args.solution, args.timed, args.verbose)
-            
+                self.run(args.solution, args.timed, args.verbose, args.timeout)
+
             case "list":
                 self.list(args.verbose)
 
@@ -118,10 +152,16 @@ class SolutionSet:
             help="Solution to run"
         )
         run_parser.add_argument(
-            "-t", "--timed", 
+            "-t", "--timed",
             action="store_true",
             default=False,
             help="Time the solution"
+        )
+        run_parser.add_argument(
+            "-T", "--timeout",
+            type=int,
+            default=None,
+            help="Abort the solution if it runs longer than this many seconds"
         )
 
         list_parser = subparsers.add_parser(

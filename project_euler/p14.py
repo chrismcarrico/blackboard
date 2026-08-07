@@ -1,11 +1,11 @@
 """Which Collatz chain under 1_000_000 is the longest"""
 
 from mathlib.collatz import collatz_chain_length
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
-solution_set = SolutionSet(14, "Which Collatz chain under 1_000_000 is the longest")
+problem = Problem(14, "Which Collatz chain under 1_000_000 is the longest")
 
-@solution_set.register()
+@problem.register()
 def solution():
     
     n_limit = 1_000_000
@@ -21,4 +21,4 @@ def solution():
     return largest_n
 
 if __name__ == "__main__":
-    solution_set.main()
+    problem.main()

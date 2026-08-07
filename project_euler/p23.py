@@ -1,11 +1,11 @@
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
 from mathlib.perfect_number import is_abundent
 
-solution_set = SolutionSet(23, "Find the sum of all the positive integers which cannot be written as the sum of two abundant numbers.")
+problem = Problem(23, "Find the sum of all the positive integers which cannot be written as the sum of two abundant numbers.")
 
 
-@solution_set.register()
+@problem.register()
 def solution():
 
     n = 28123
@@ -27,4 +27,4 @@ def solution():
 
 
 if __name__ == "__main__":
-    solution_set.main()
+    problem.main()

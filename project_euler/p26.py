@@ -1,12 +1,12 @@
 from mathlib.reciprocal import calculate_reciprocal_long
 from mathlib.cycles import find_longest_cycle
 
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
-solution_set = SolutionSet(26, "Find the value of d < 1000 for which d contains the longest recurring cycle in its decimal fraction part.")
+problem = Problem(26, "Find the value of d < 1000 for which d contains the longest recurring cycle in its decimal fraction part.")
 
 
-@solution_set.register()
+@problem.register()
 def solution():
     
     max_d = 0
@@ -26,4 +26,4 @@ def solution():
     return max_d
 
 if __name__ == "__main__":
-    solution_set.main()
+    problem.main()

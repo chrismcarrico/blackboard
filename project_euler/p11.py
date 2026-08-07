@@ -2,11 +2,11 @@
 import math
 
 from project_euler.data import load
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
-solution_set = SolutionSet(11, "Find the greatest product of four adjacent numbers in the same direction")
+problem = Problem(11, "Find the greatest product of four adjacent numbers in the same direction")
 
-@solution_set.register()
+@problem.register()
 def solution():
         
     current_max = 0

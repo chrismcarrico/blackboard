@@ -1,11 +1,11 @@
 """All paths through a lattice"""
 
 import math
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
-solution_set = SolutionSet(15, "All paths through a lattice")
+problem = Problem(15, "All paths through a lattice")
 
-@solution_set.register()
+@problem.register()
 def solution_1():
     import networkx as nx
 
@@ -33,9 +33,9 @@ def solution_1():
     return len([i for i in nx.all_simple_paths(graph, 0, nnodes-1)])
 
 
-@solution_set.register(default=True)
+@problem.register(default=True)
 def solution():
     return math.comb(2*20, 20)
 
 if __name__ == "__main__":
-    solution_set.main()
+    problem.main()

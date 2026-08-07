@@ -2,11 +2,11 @@
 
 If all the numbers from 1 to 1000 (one thousand) inclusive were written out in words, how many letters would be used?"""
 
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
-solution_set = SolutionSet(17, "If all the numbers from 1 to 1000 (one thousand) inclusive were written out in words, how many letters would be used?")
+problem = Problem(17, "If all the numbers from 1 to 1000 (one thousand) inclusive were written out in words, how many letters would be used?")
 
-@solution_set.register()
+@problem.register()
 def solution_1():
     # TODO: redo??
     return 21124

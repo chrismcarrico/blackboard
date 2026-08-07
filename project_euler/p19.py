@@ -1,9 +1,9 @@
 from mathlib.zellers_algorithm import zellers_algorithm
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
-solution_set = SolutionSet(19, "How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)")
+problem = Problem(19, "How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)")
 
-@solution_set.register()
+@problem.register()
 def solution():
 
     sundays = 0
@@ -16,4 +16,4 @@ def solution():
     return sundays
 
 if __name__ == "__main__":
-    solution_set.main()
+    problem.main()

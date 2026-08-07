@@ -1,11 +1,11 @@
 from mathlib.fib import get_next_fib
 
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
-solution_set = SolutionSet(25, "What is the index of the first term in the Fibonacci sequence to contain 1000 digits?")
+problem = Problem(25, "What is the index of the first term in the Fibonacci sequence to contain 1000 digits?")
 
 
-@solution_set.register()
+@problem.register()
 def solution():
 
     fib_gen = get_next_fib()
@@ -22,4 +22,4 @@ def solution():
 
 
 if __name__ == "__main__":
-    solution_set.main()
+    problem.main()

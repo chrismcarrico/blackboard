@@ -12,6 +12,6 @@ with open(REGRESSION_TEST_CASES_YAML, "r") as f:
 def test_problems(problem, answer):
 
     problem_module = importlib.import_module(f"{problem}")
-    solution_set = problem_module.solution_set
-    
-    assert solution_set.run_solution(solution_set.default) == answer
+    problem_obj = problem_module.problem
+
+    assert problem_obj.run_solution(problem_obj.default) == answer

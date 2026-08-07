@@ -1,9 +1,9 @@
 from mathlib.amicable_numbers import d
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
-solution_set = SolutionSet(21, "Evaluate the sum of all the amicable numbers under 10000.")
+problem = Problem(21, "Evaluate the sum of all the amicable numbers under 10000.")
 
-@solution_set.register()
+@problem.register()
 def solution():
 
     bound = 10_000
@@ -23,4 +23,4 @@ def solution():
 
 
 if __name__ == "__main__":
-    solution_set.main()
+    problem.main()

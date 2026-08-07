@@ -9,12 +9,12 @@ That is, 3 + 7 + 4 + 9 = 23.
 
 Find the maximum total from top to bottom in the triangle saved in data/p18_input.txt"""
 
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 from project_euler.data import load
 
-solution_set = SolutionSet(18, "Find the maximum total from top to bottom in the triangle saved in data/p18_input.txt")
+problem = Problem(18, "Find the maximum total from top to bottom in the triangle saved in data/p18_input.txt")
 
-@solution_set.register()
+@problem.register()
 def solution():
     data = load("p18_input").splitlines()
     data = [[int(j) for j in i.split()] for i in data]
@@ -30,4 +30,4 @@ def solution():
     return data[0][0]
 
 if __name__ == "__main__":
-    solution_set.main()
+    problem.main()

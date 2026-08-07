@@ -1,11 +1,11 @@
 """Find the sum of all primes less than 2_000_000"""
 
 from mathlib.eratoshenes import primes_less_than_n_generator
-from project_euler.solution_set.solution_set import SolutionSet
+from project_euler.problem.problem import Problem
 
-solution_set = SolutionSet(10, "Find the sum of all primes less than 2_000_000")
+problem = Problem(10, "Find the sum of all primes less than 2_000_000")
 
-@solution_set.register()
+@problem.register()
 def solution():
     sieve = primes_less_than_n_generator(1_000_000_000)
     
