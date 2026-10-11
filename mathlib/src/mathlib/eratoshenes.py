@@ -1,8 +1,11 @@
+import functools
 import math
 import typing
 
 #TODO: MemoryError?
 
+# the list is shared between callers, so it must not be modified
+@functools.lru_cache(maxsize=32)
 def primes_less_than_n(n: int) -> list[int]:
     is_prime = [1]*n
 

@@ -1,0 +1,28 @@
+from mathlib.amicable_numbers import d
+from project_euler.problem.problem import Problem
+
+problem = Problem(21, "Evaluate the sum of all the amicable numbers under 10000.")
+
+@problem.register()
+def solution():
+
+    bound = 10_000
+    amicable_numbers = []
+
+    for i in range(bound):
+
+        if i not in amicable_numbers:
+            possible = d(i)
+
+            if possible < bound and possible != i:
+                if d(possible) == i:
+                    amicable_numbers.append(i)
+                    amicable_numbers.append(possible)
+
+    return sum(amicable_numbers)
+
+
+problem.register_answer(31626)
+
+if __name__ == "__main__":
+    raise SystemExit(problem.main())

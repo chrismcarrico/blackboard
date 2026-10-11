@@ -21,13 +21,17 @@ mathlib = { workspace = true }
 project_euler = { workspace = true }
 
 [tool.pytest.ini_options]
+python_files = ["*_test.py"]
 pythonpath = [
     "mathlib/src",
-    "project_euler",
 ]
 testpaths = [
     "mathlib/src",
     "project_euler",
+]
+markers = [
+    "euler: Project Euler answer regression (slow)",
+    "slow: solutions too slow for a normal run",
 ]
 
 [tool.pyright]
@@ -40,6 +44,7 @@ include = [
 dev = [
     "black>=26.5.1",
     "pytest>=9.0.1",
+    "pytest-xdist>=3.6",
     "ruff>=0.16.1",
     "uv>=0.12.2",
 ]

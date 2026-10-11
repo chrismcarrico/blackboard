@@ -6,9 +6,14 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "mathlib",
-    "pytest>=9.0.1",
-    "pyyaml>=6.0.3",
 ]
 
 [tool.uv.sources]
 mathlib = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.9.5,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-root = ""

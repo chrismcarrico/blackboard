@@ -1,0 +1,25 @@
+"""Find the first triangle number with over 500 divisors"""
+
+from mathlib.sigma import sigma
+from mathlib.triangular_numbers import nth_triangular_number_formula
+from project_euler.problem.problem import Problem
+
+problem = Problem(12, "Find the first triangle number with over 500 divisors")
+
+@problem.register()
+def solution():
+    
+    nfactors = 0
+    i = 1
+    while nfactors < 500:
+        a = nth_triangular_number_formula(i)
+        nfactors = sigma(a)
+        i += 1
+
+    return a
+
+
+problem.register_answer(76576500)
+
+if __name__ == "__main__":
+    raise SystemExit(problem.main())

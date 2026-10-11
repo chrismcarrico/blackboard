@@ -1,6 +1,6 @@
 import pytest
 
-from mathlib.factorization.vector import vector_factorization
+from mathlib.factorization.vector import partial_vector_factorization, vector_factorization
 
 def test_factor_exponents():
     
@@ -13,3 +13,9 @@ def test_factor_exponents_no_base():
 
 def test_factor_exponents_incomplete_base():
     assert vector_factorization(2**3 * 3**2 * 7 * 11, [2, 3, 7]) is None
+
+def test_partial_factorization_cofactor():
+    assert partial_vector_factorization(2**3 * 3**2 * 7 * 11, [2, 3, 7]) == ([3, 2, 1], 11)
+
+def test_partial_factorization_complete():
+    assert partial_vector_factorization(2**3 * 3**2, [2, 3, 7]) == ([3, 2, 0], 1)
