@@ -55,3 +55,11 @@ def miller_rabin(n: int, max_trials: int):
     return not any(_try_composite(a, d, n, s) 
                    for a in known_primes[:max_trials])
     
+def next_prime(n: int, max_trials: int = 20) -> int:
+    """The smallest prime greater than n"""
+
+    n = max(n + 1, 2)
+    while not miller_rabin(n, max_trials):
+        n += 1
+
+    return n

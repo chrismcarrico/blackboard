@@ -1,6 +1,6 @@
 import pytest
 
-from mathlib.primality.miller_rabin import is_known_prime, seperate_powers_of_two, miller_rabin
+from mathlib.primality.miller_rabin import is_known_prime, miller_rabin, next_prime, seperate_powers_of_two
 
 
 @pytest.mark.parametrize("n,test_result", [(13, True), (26, False), (1000, False)])
@@ -36,3 +36,8 @@ miller_rabin_trials = [
 @pytest.mark.parametrize("n,result", miller_rabin_trials)
 def test_miller_rabin(n, result):
     assert miller_rabin(n, 5) == result
+
+
+@pytest.mark.parametrize("n,result", [(0, 2), (2, 3), (13, 17), (24, 29), (10**9, 10**9 + 7)])
+def test_next_prime(n, result):
+    assert next_prime(n) == result

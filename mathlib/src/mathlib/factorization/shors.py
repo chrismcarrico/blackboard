@@ -1,32 +1,16 @@
 import random
 
+from mathlib.factorization.trial_division import distinct_prime_factors
 from mathlib.gcd import gcd
 from mathlib.perfect_power import perfect_power_root
 from mathlib.phi import phi
 from mathlib.primality.miller_rabin import miller_rabin
 
-def _distinct_prime_factors(n: int) -> list[int]:
-
-    prime_factors = []
-
-    p = 2
-    while p * p <= n:
-        if n % p == 0:
-            prime_factors.append(p)
-            while n % p == 0:
-                n //= p
-        p += 1
-
-    if n > 1:
-        prime_factors.append(n)
-
-    return prime_factors
-
 def find_order_of_a_modulo_n(a: int, n: int) -> int:
     """The step a quantum computer would do, the smallest r > 0 with a^r = 1 (mod n)"""
 
     phi_n = phi(n)
-    prime_factors = _distinct_prime_factors(phi_n)
+    prime_factors = distinct_prime_factors(phi_n)
 
     order_ = phi_n
     for p in prime_factors:

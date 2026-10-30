@@ -3,13 +3,7 @@ import math
 import pytest
 
 from mathlib.factorization.factor import METHODS, factor, plan, split
-from mathlib.primality.miller_rabin import miller_rabin
-
-def _next_prime(n: int) -> int:
-    n += 1
-    while not miller_rabin(n, 20):
-        n += 1
-    return n
+from mathlib.primality.miller_rabin import next_prime
 
 def _product(factors: dict[int, int]) -> int:
     return math.prod(p**e for p, e in factors.items())
@@ -56,7 +50,7 @@ def test_factor_medium_semiprime():
     assert factor(p * q) == {p: 1, q: 1}
 
 def test_factor_large_semiprime():
-    p, q = _next_prime(10**14), _next_prime(3 * 10**14)
+    p, q = next_prime(10**14), next_prime(3 * 10**14)
     assert factor(p * q) == {p: 1, q: 1}
 
 def test_factor_large_prime_power():
@@ -74,12 +68,12 @@ def test_factor_small_factor_of_huge_number():
 
 def test_factor_close_factors_of_huge_number():
     # far too big to sieve, but fermat finds factors this close together straight away
-    p = _next_prime(10**40)
-    q = _next_prime(p)
+    p = next_prime(10**40)
+    q = next_prime(p)
     assert factor(p * q) == {p: 1, q: 1}
 
 def test_factor_many_factors():
-    primes = [3, 10007, 1000003, 1000033, _next_prime(10**10), _next_prime(10**12)]
+    primes = [3, 10007, 1000003, 1000033, next_prime(10**10), next_prime(10**12)]
     assert factor(math.prod(primes) * 10007) == {p: 2 if p == 10007 else 1 for p in primes}
 
 @pytest.mark.parametrize("method", METHODS)
@@ -100,14 +94,25 @@ def test_plan_small():
     assert plan(10007 * 10009)[0][0] == "pollard_rho"
 
 def test_plan_large():
-    assert [name for name, _ in plan(_next_prime(10**14) * _next_prime(3 * 10**14))] == ["fermat", "pollard_rho", "quadratic_sieve", "pollard_rho"]
+    assert [name for name, _ in plan(next_prime(10**14) * next_prime(3 * 10**14))] == ["fermat", "pollard_rho", "quadratic_sieve", "pollard_rho"]
+
+def test_plan_number_field_sieve_min_bits():
+    n = next_prime(10**14) * next_prime(3 * 10**14)
+    assert "number_field_sieve" not in [name for name, _ in plan(n)]
+    assert [name for name, _ in plan(n, number_field_sieve_min_bits=60)] == ["fermat", "pollard_rho", "number_field_sieve", "quadratic_sieve", "pollard_rho"]
+
+def test_factor_number_field_sieve():
+    p, q = next_prime(10**9), next_prime(3 * 10**9)
+    assert factor(p * q, "number_field_sieve") == {p: 1, q: 1}
+    # pollard rho and fermat get no chance to split it before the number field sieve
+    assert factor(p * q, pollard_rho_steps_large=0, fermat_steps=0, number_field_sieve_min_bits=60) == {p: 1, q: 1}
 
 def test_plan_pollard_rho_max_bits():
     n = 10007 * 10009
     assert plan(n, pollard_rho_max_bits=10)[0][0] == "fermat"
 
 def test_plan_steps():
-    n = _next_prime(10**14) * _next_prime(3 * 10**14)
+    n = next_prime(10**14) * next_prime(3 * 10**14)
     steps = {"fermat_steps": 7, "pollard_rho_steps": 11, "pollard_rho_steps_large": 13}
 
     splitters = plan(n, **steps)

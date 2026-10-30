@@ -24,6 +24,7 @@ THRESHOLD_HELP = {
     "pollard_rho_steps": "Look for small factors for N steps before falling back on the quadratic sieve",
     "pollard_rho_steps_large": "The same, for integers of more than --large-bits bits",
     "large_bits": "Size past which --pollard-rho-steps-large is used",
+    "number_field_sieve_min_bits": "Try the number field sieve before the quadratic sieve on integers of N bits or more",
     "miller_rabin_trials": "Bases tried by the primality test on large integers",
 }
 

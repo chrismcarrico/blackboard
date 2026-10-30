@@ -3,6 +3,7 @@ import typing
 
 from mathlib.eratoshenes import primes_less_than_n
 from mathlib.factorization.fermat import fermat_factorization
+from mathlib.factorization.nfs import number_field_sieve
 from mathlib.factorization.pollard_rho import pollard_rho
 from mathlib.factorization.qs import quadratic_sieve
 from mathlib.factorization.shors import find_factor
@@ -10,7 +11,7 @@ from mathlib.factorization.trial_division import trial_division
 from mathlib.perfect_power import perfect_power
 from mathlib.primality.miller_rabin import miller_rabin
 
-Method = typing.Literal["auto", "trial_division", "fermat", "pollard_rho", "quadratic_sieve", "shors"]
+Method = typing.Literal["auto", "trial_division", "fermat", "pollard_rho", "quadratic_sieve", "number_field_sieve", "shors"]
 
 METHODS: tuple[Method, ...] = typing.get_args(Method)
 
@@ -24,6 +25,8 @@ FERMAT_STEPS = 100
 POLLARD_RHO_STEPS = 1_000
 POLLARD_RHO_STEPS_LARGE = 20_000
 LARGE_BITS = 80
+# about 100 digits, where the number field sieve overtakes the quadratic sieve in a fast implementation
+NUMBER_FIELD_SIEVE_MIN_BITS = 330
 MILLER_RABIN_TRIALS = 20
 
 SPLITTERS: dict[str, Splitter] = {
@@ -31,6 +34,7 @@ SPLITTERS: dict[str, Splitter] = {
     "fermat": fermat_factorization,
     "pollard_rho": pollard_rho,
     "quadratic_sieve": quadratic_sieve,
+    "number_field_sieve": number_field_sieve,
     "shors": find_factor,
 }
 
@@ -42,6 +46,7 @@ def plan(
         pollard_rho_steps: int = POLLARD_RHO_STEPS,
         pollard_rho_steps_large: int = POLLARD_RHO_STEPS_LARGE,
         large_bits: int = LARGE_BITS,
+        number_field_sieve_min_bits: int = NUMBER_FIELD_SIEVE_MIN_BITS,
     ) -> list[tuple[str, Splitter]]:
     """The splitting algorithms worth trying on n, best first
 
@@ -58,11 +63,15 @@ def plan(
 
     max_steps = pollard_rho_steps if n.bit_length() <= large_bits else pollard_rho_steps_large
 
+    # cost depends only on the size of n, and grows more slowly with it than the quadratic sieve's
+    number_field_sieve_splitters = [("number_field_sieve", number_field_sieve)] if n.bit_length() >= number_field_sieve_min_bits else []
+
     return [
         # instant when the two factors are close together, hopeless otherwise
         ("fermat", functools.partial(fermat_factorization, max_steps=fermat_steps)),
         # cost depends on the size of the smallest factor rather than on the size of n
         ("pollard_rho", functools.partial(pollard_rho, starting_value=2, max_steps=max_steps)),
+        *number_field_sieve_splitters,
         # cost depends only on the size of n
         ("quadratic_sieve", quadratic_sieve),
         ("pollard_rho", pollard_rho),
@@ -116,6 +125,7 @@ def factor(
         pollard_rho_steps: int = POLLARD_RHO_STEPS,
         pollard_rho_steps_large: int = POLLARD_RHO_STEPS_LARGE,
         large_bits: int = LARGE_BITS,
+        number_field_sieve_min_bits: int = NUMBER_FIELD_SIEVE_MIN_BITS,
         miller_rabin_trials: int = MILLER_RABIN_TRIALS,
     ) -> dict[int, int]:
     """The prime factorization of n, as a mapping from each prime factor to its exponent
@@ -131,6 +141,7 @@ def factor(
     pollard_rho_steps: how long to look for small factors before falling back on the quadratic sieve
     pollard_rho_steps_large: the same, for integers of more than large_bits bits
     large_bits: the size past which the quadratic sieve is slow enough to make a longer look worthwhile
+    number_field_sieve_min_bits: from this many bits the number field sieve is tried before the quadratic sieve
     miller_rabin_trials: bases tried by the primality test once n is too big for it to be deterministic
     """
 
@@ -146,6 +157,7 @@ def factor(
         "pollard_rho_steps": pollard_rho_steps,
         "pollard_rho_steps_large": pollard_rho_steps_large,
         "large_bits": large_bits,
+        "number_field_sieve_min_bits": number_field_sieve_min_bits,
     }
 
     factors: dict[int, int] = {}

@@ -3,10 +3,11 @@ import typing
 
 from mathlib.quadratic_residue import legendre_symbol
 from mathlib.eratoshenes import primes_less_than_n_generator
+from mathlib.factorization.squares import factor_from_dependencies as factor_from_squares
+from mathlib.factorization.squares import log_sieve, square_root_of_product
 from mathlib.factorization.vector import partial_vector_factorization, vector_factorization
-from mathlib.linalg.gf2_gaussian_elimination import find_dependencies
 from mathlib.gcd import gcd
-from mathlib.primality.miller_rabin import miller_rabin
+from mathlib.primality.miller_rabin import next_prime
 from mathlib.tonelli_shanks import tonelli_shanks
 
 # https://risencrypto.github.io/QuadraticSieve/#kraitchiks-factorization
@@ -46,30 +47,18 @@ def factor_from_dependencies(n: int, a_list: list[int], exponent_vectors: list[l
     """
 
     # each dependency is a set of relations whose right hand sides multiply to a perfect square
-    dependencies = find_dependencies([[i%2 for i in exponent_vector] for exponent_vector in exponent_vectors])
-
-    for dependency in dependencies:
+    def square_roots(dependency: list[int]) -> tuple[int, int]:
 
         # a^2 = c^2 (mod n)
         a = 1
         for i in dependency:
             a = (a * a_list[i]) % n
 
-        c = 1
-        for j, p in enumerate(primes):
-            exponent = sum(exponent_vectors[i][j] for i in dependency)
-            c = (c * pow(p, exponent // 2, n)) % n
+        exponents = [sum(column) for column in zip(*(exponent_vectors[i] for i in dependency))]
+        return a, square_root_of_product(primes, exponents, n)
 
-        difference = (a - c) % n
-        if difference == 0:
-            continue
-
-        factor = gcd(difference, n)
-
-        if 1 < factor < n:
-            return factor
-
-    return None
+    rows = [[i%2 for i in exponent_vector] for exponent_vector in exponent_vectors]
+    return factor_from_squares(n, rows, square_roots)
 
 def quadratic_sieve_v1(n: int, b: int | None = None, m: int = 5000, tolerance: int = 5) -> int | None:
     """Returns a non trivial factor of n, or None if it fails to find one
@@ -145,11 +134,11 @@ def polynomial_generator(n: int, m: int) -> typing.Generator[tuple[int, int]]:
 
     yield 1, calculate_ceil_sqrt_n(n)
 
-    q = max(3, math.isqrt(math.isqrt(2*n) // m) | 1)
+    q = max(3, math.isqrt(math.isqrt(2*n) // m) | 1) - 1
     while True:
-        if miller_rabin(q, 20) and legendre_symbol(n, q) == 1:
+        q = next_prime(q)
+        if legendre_symbol(n, q) == 1:
             yield q, lift_square_root(n, q)
-        q += 2
 
 def sieve_polynomial(n: int, q: int, b: int, m: int, factor_base: list[int], roots: list[int], slack: float) -> typing.Generator[tuple[int, int]]:
     """Yields (x, g(x)) for -m <= x <= m where g(x) is likely to be smooth over the factor base"""
@@ -157,19 +146,12 @@ def sieve_polynomial(n: int, q: int, b: int, m: int, factor_base: list[int], roo
     a = q*q
     c = (b*b - n) // a
 
-    size = 2*m + 1
-    sieve = [0.0]*size
-
-    for p, t in zip(factor_base, roots):
-
-        # g(x) is linear rather than quadratic modulo these, trial division will still find them
-        if p == 2 or a % p == 0:
-            continue
-
-        log_p = math.log2(p)
-        for root in set(polynomial_roots(q, b, p, t)):
-            for i in range((root + m) % p, size, p):
-                sieve[i] += log_p
+    # g(x) is linear rather than quadratic modulo 2 and the divisors of a, trial division will still find them
+    sieve = log_sieve(2*m + 1, (
+        (p, (root + m) % p)
+        for p, t in zip(factor_base, roots) if p != 2 and a % p != 0
+        for root in set(polynomial_roots(q, b, p, t))
+    ))
 
     for i, log_smooth_part in enumerate(sieve):
         x = i - m
